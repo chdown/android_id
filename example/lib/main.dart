@@ -17,6 +17,7 @@ class _MyAppState extends State<MyApp> {
   static const _androidIdPlugin = AndroidId();
 
   var _androidId = 'Unknown';
+  var _isEmulator = false;
 
   @override
   void initState() {
@@ -33,6 +34,11 @@ class _MyAppState extends State<MyApp> {
       androidId = await _androidIdPlugin.getId() ?? 'Unknown ID';
     } on PlatformException {
       androidId = 'Failed to get Android ID.';
+    }
+    try {
+      _isEmulator = await _androidIdPlugin.isEmulator() ?? true;
+    } on PlatformException {
+      androidId = 'Failed to get _isRealDevice.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -51,7 +57,12 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Android ID: $_androidId'),
+          child: Column(
+            children: [
+              Text('Android ID: $_androidId'),
+              Text('_isRealDevice: ${_isEmulator ? "模拟设备" : "物理设备"}'),
+            ],
+          ),
         ),
       ),
     );

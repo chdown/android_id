@@ -16,4 +16,13 @@ class AndroidId {
 
     return _methodChannel.invokeMethod<String?>('getId');
   }
+
+  /// Calls the native method to retrieve the Android ID.
+  Future<bool?> isEmulator() async {
+    final isAndroid =
+        !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+    if (!isAndroid) return null;
+
+    return _methodChannel.invokeMethod<bool?>('isEmulator');
+  }
 }
