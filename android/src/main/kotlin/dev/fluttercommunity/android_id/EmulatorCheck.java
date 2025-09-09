@@ -180,5 +180,51 @@ public class EmulatorCheck {
                 || checkFiles(LDPLAYER_FILES)
                 || checkFiles(MEMU_FILES));
     }
+
+    /**
+     * 获取设备常用信息
+     */
+    public static java.util.Map<String, Object> getDeviceInfo() {
+        java.util.Map<String, Object> deviceInfo = new java.util.HashMap<>();
+        deviceInfo.put("manufacturer", Build.MANUFACTURER);
+        deviceInfo.put("brand", Build.BRAND);
+        deviceInfo.put("model", Build.MODEL);
+        deviceInfo.put("device", Build.DEVICE);
+        deviceInfo.put("product", Build.PRODUCT);
+        deviceInfo.put("board", Build.BOARD);
+        deviceInfo.put("hardware", Build.HARDWARE);
+        deviceInfo.put("host", Build.HOST);
+        deviceInfo.put("fingerprint", Build.FINGERPRINT);
+        deviceInfo.put("bootloader", Build.BOOTLOADER);
+        deviceInfo.put("radioVersion", Build.getRadioVersion());
+        deviceInfo.put("osVersion", Build.VERSION.RELEASE);
+        deviceInfo.put("sdkInt", Build.VERSION.SDK_INT);
+        deviceInfo.put("incremental", Build.VERSION.INCREMENTAL);
+        deviceInfo.put("codename", Build.VERSION.CODENAME);
+        deviceInfo.put("architecture", System.getProperty("os.arch") != null ? System.getProperty("os.arch") : "unknown");
+        deviceInfo.put("javaVmName", System.getProperty("java.vm.name") != null ? System.getProperty("java.vm.name") : "unknown");
+        deviceInfo.put("javaVmVersion", System.getProperty("java.vm.version") != null ? System.getProperty("java.vm.version") : "unknown");
+        return deviceInfo;
+    }
+
+    /**
+     * 检查文件数组中存在的文件
+     */
+    public static java.util.List<String> checkFilesExist(java.util.List<String> filePaths) {
+        java.util.List<String> existingFiles = new java.util.ArrayList<>();
+        
+        for (String filePath : filePaths) {
+            try {
+                File file = new File(filePath);
+                if (file.exists()) {
+                    existingFiles.add(filePath);
+                }
+            } catch (Exception e) {
+                // 忽略无法访问的文件，继续检查其他文件
+            }
+        }
+        
+        return existingFiles;
+    }
     // #endregion
 }

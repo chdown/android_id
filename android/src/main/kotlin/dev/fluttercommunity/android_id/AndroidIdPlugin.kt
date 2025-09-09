@@ -45,6 +45,27 @@ class AndroidIdPlugin : FlutterPlugin, MethodCallHandler {
                 }
             }
 
+            "getDeviceInfo" -> {
+                try {
+                    result.success(getDeviceInfo())
+                } catch (e: Exception) {
+                    result.error("ERROR_GETTING_DEVICE_INFO", "Failed to get device info", e.localizedMessage)
+                }
+            }
+
+            "checkFilesExist" -> {
+                try {
+                    val filePaths = call.argument<List<String>>("filePaths")
+                    if (filePaths != null) {
+                        result.success(checkFilesExist(filePaths))
+                    } else {
+                        result.error("ERROR_INVALID_PARAMS", "filePaths parameter is required", null)
+                    }
+                } catch (e: Exception) {
+                    result.error("ERROR_CHECKING_FILES", "Failed to check files", e.localizedMessage)
+                }
+            }
+
             else -> result.notImplemented()
         }
     }
@@ -62,5 +83,19 @@ class AndroidIdPlugin : FlutterPlugin, MethodCallHandler {
     @SuppressLint("HardwareIds")
     private fun isEmulator(): Boolean? {
         return EmulatorCheck.isEmulator()
+    }
+
+    /**
+     * 获取设备常用信息
+     */
+    private fun getDeviceInfo(): Map<String, Any> {
+        return EmulatorCheck.getDeviceInfo()
+    }
+
+    /**
+     * 检查文件数组中存在的文件
+     */
+    private fun checkFilesExist(filePaths: List<String>): List<String> {
+        return EmulatorCheck.checkFilesExist(filePaths)
     }
 }
